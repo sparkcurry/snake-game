@@ -10,8 +10,8 @@
 (define HEIGHT-PX (* SEG-SIZE 30))
 (define MT-SCENE (empty-scene WIDTH-PX HEIGHT-PX))
 (define GOO-IMG (square SEG-SIZE 255 "red"))
-(define SEG-IMG (bitmap "graphics/body.gif"))
-(define HEAD-IMG (bitmap "graphics/head.gif"))
+(define SEG-IMG (square SEG-SIZE  150 "blue"))
+(define HEAD-IMG (square SEG-SIZE 120 "blue"))
 
 (define HEAD-LEFT-IMG HEAD-IMG)
 (define HEAD-DOWN-IMG (rotate 90 HEAD-LEFT-IMG))
@@ -100,13 +100,6 @@
       (or (self-colliding? snake) (wall-colliding? snake)))
 
 
-
-
-(world-change-dir plain-world "right")
-(pit (snake "right" (list (posn 2 18))) '())
-
-
-
 (define (close? s g)
   (posn=? s (goo-loc g)))
 
@@ -185,13 +178,22 @@
             [else
              (pit (snake-change-dir the-snake d) (pit-goos w))]))
 
+(define (snake-change-dir sn d)
+      (snake d (snake-segs sn)))
+
+(define (opposite-dir? d1 d2)
+  (cond [(string=? d1 "up") (string=? d2 "down")]
+        [(string=? d1 "down") (string=? d2 "up")]
+        [(string=? d1 "left") (string=? d2 "right")]
+        [(string=? d1 "right") (string=? d2 "left")]))
+
 
 (define snake-going-left (snake "left" (list (posn 2 18))))
 (define plain-world (pit snake-going-left empty))
 
 (define (render-end w)
       (overlay (text "Game Over" ENDGAME-TEXT-SIZE "black")
-               (render-snake-world w)))
+               (render-pit w)))
 
 (define (self-colliding? snake)
 (cons? (member (snake-head snake) (snake-body snake))))
