@@ -1,22 +1,26 @@
 #lang racket
 (require 2htdp/universe 2htdp/image)
 
-(define TICK-RATE 1/10)
+(define TICK-RATE 1/8)
 (define SIZE 30)
-(define SEG-SIZE 15)
+(define SEG-SIZE 23)
 (define MAX-GOO 5)
 (define EXPIRATION-TIME 150)
 (define WIDTH-PX (* SEG-SIZE 30))
 (define HEIGHT-PX (* SEG-SIZE 30))
 (define MT-SCENE (empty-scene WIDTH-PX HEIGHT-PX))
-(define GOO-IMG (square SEG-SIZE 255 "red"))
-(define SEG-IMG (square SEG-SIZE  150 "blue"))
-(define HEAD-IMG (square SEG-SIZE 120 "blue"))
+(define GOO-IMG (square SEG-SIZE "solid" "red"))
+(define SEG-IMG (square SEG-SIZE  "solid" "blue"))
+(define HEAD-IMG (scale 1/13 (bitmap "snakehead.png")))
 
-(define HEAD-LEFT-IMG HEAD-IMG)
-(define HEAD-DOWN-IMG (rotate 90 HEAD-LEFT-IMG))
-(define HEAD-RIGHT-IMG(flip-horizontal HEAD-LEFT-IMG))
-(define HEAD-UP-IMG (flip-vertical HEAD-DOWN-IMG))
+(define HEAD-LEFT-IMG
+  (rotate -90 HEAD-IMG))
+(define HEAD-DOWN-IMG
+  HEAD-IMG)
+(define HEAD-RIGHT-IMG
+  (flip-horizontal HEAD-LEFT-IMG))
+(define HEAD-UP-IMG
+  (flip-vertical HEAD-DOWN-IMG))
 
 (define ENDGAME-TEXT-SIZE 15)
 
@@ -192,7 +196,7 @@
 (define plain-world (pit snake-going-left empty))
 
 (define (render-end w)
-      (overlay (text "Game Over" ENDGAME-TEXT-SIZE "black")
+      (overlay (text "Oops! Try again" 50 "purple")
                (render-pit w)))
 
 (define (self-colliding? snake)
